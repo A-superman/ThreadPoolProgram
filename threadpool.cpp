@@ -29,7 +29,7 @@ void ThreadPool::setTaskQueMaxThreadHold(int threshold)
     taskQueMaxThreshold_ = threshold;
 }
 
-// 给线程池提交任务
+// 给线程池提交任务 用户调用该接口，传入任务对象，生产任务
 void ThreadPool::submitTask(std::shared_ptr<Task> sp)
 {
 
@@ -53,7 +53,7 @@ void ThreadPool::start(int initThreadSize)
     }
 }
 
-// 定义线程函数
+// 定义线程函数 线程池的所有线程从任务队列里面消费任务
 void ThreadPool::threadFunc()
 {
     std::cout << "begin threadFunc tid:" << std::this_thread::get_id()
