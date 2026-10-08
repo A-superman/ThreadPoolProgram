@@ -12,6 +12,7 @@
 // 任务抽象基类
 class Task
 {
+public:
     // 用户可以自定义任意任务类型，从Task继承，重写run方法，实现自定义任务处理
     virtual void run() = 0;
 };
@@ -67,7 +68,7 @@ private:
     void threadFunc();
 
 private:
-    std::vector<Thread*> threads_;  // 线程列表
+    std::vector<std::unique_ptr<Thread>> threads_;  // 线程列表
     int initThreadSize_;         // 初始的线程数量
     
     std::queue<std::shared_ptr<Task>> taskQue_; // 任务队列
