@@ -6,7 +6,7 @@
 class MyTask : public Task
 {
 public:
-    void run()
+    Any run()
     {
         int sum  = 10;
         std::cout << "tid : " << std::this_thread::get_id() << " begin " << std::endl;
@@ -20,7 +20,8 @@ int main()
 {
     ThreadPool threadpool;
     threadpool.start(4);
-    threadpool.submitTask(std::make_shared<MyTask>());
+    Result res =  threadpool.submitTask(std::make_shared<MyTask>());
+    int sum = res.get().cast_<int>(); // get返回一个Any类型，怎么转换成具体的类型呢？
     threadpool.submitTask(std::make_shared<MyTask>());
     threadpool.submitTask(std::make_shared<MyTask>());
     threadpool.submitTask(std::make_shared<MyTask>());
