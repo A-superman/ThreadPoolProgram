@@ -13,6 +13,7 @@ public:
         std::this_thread::sleep_for(std::chrono::seconds(5));
         std::cout << "tid : " << std::this_thread::get_id() << " end "
             << std::endl;
+        return sum;
     }
 };
 

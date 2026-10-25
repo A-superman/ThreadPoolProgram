@@ -10,11 +10,12 @@
 #include <functional>
 
 // Any类型：可以接收任意数据的类型
-class Any {
+class Any { // 泛型编程：模板       智能指针        多态的应用（以及虚析构函数）      
 public:
     Any() = default;
     ~Any() = default;
     Any(const Any&) = delete;
+    Any& operator=(const Any&) = delete;
     Any(Any&&) = default;
     Any& operator=(Any&&) = default;
     // 这个构造函数可以让Any类型接收任意其他的数据
@@ -49,6 +50,33 @@ private:
     };
 
     std::unique_ptr<Base> base_;
+};
+
+// 实现一个信号量类
+class Semaphore {
+public:
+    Semaphore(int limit = 0) : resLimit_(limit)
+    {}
+    ~Semaphore() = default;
+
+    // 获取一个信号量资源
+    void wait()
+    {
+        std::unique_lock<std::mutex> lock(mtx_);
+        cond_.wait(lock, [&]()->bool { return resLimit_ > 0; });
+        resLimit_--;
+    }
+    // 增加一个信号量资源
+    void post()
+    {
+        std::unique_lock<std::mutex> lock(mtx_);
+        resLimit_++;
+        cond_.notify_all();
+    }
+private:
+    int resLimit_;
+    std::mutex mtx_;
+    std::condition_variable cond_;
 };
 
 // 任务抽象基类
